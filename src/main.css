@@ -1,3 +1,98 @@
-x-stub {
-  display: block; 
+x-splitbox {
+  position: relative;
+  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox;      /* TWEENER - IE 10 */
+  display: -webkit-flex;     /* NEW - Chrome */
+  display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  height: 100%;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -ms-box-orient: horizontal;
+  box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+x-splitbox[direction="column"] {
+  -webkit-box-orient: vertical;
+  -moz-box-orient: verticalvertical;
+  -ms-box-orient: vertical;
+  box-orient: vertical;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+x-splitbox[x-splitter-dragging], x-splitbox > [splitter] {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+x-splitbox > [splitter] {
+  display: block;
+  position: relative;
+  min-width: 0.5em;
+  cursor: ew-resize;
+  background: #bbb;
+  border: 1px solid #aaa;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+  x-splitbox > [splitter]:before {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 800"><path d="M153.6 399.36c-62.208 0-112.64 50.432-112.64 112.64s50.432 112.64 112.64 112.64 112.64-50.432 112.64-112.64c0-62.208-50.432-112.64-112.64-112.64zM512 399.36c-62.208 0-112.64 50.432-112.64 112.64s50.432 112.64 112.64 112.64 112.589-50.432 112.589-112.64c0-62.208-50.381-112.64-112.589-112.64zM870.4 399.36c-62.208 0-112.64 50.432-112.64 112.64s50.432 112.64 112.64 112.64 112.64-50.432 112.64-112.64c0-62.208-50.432-112.64-112.64-112.64z"></path></svg>');
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    color: rgba(0,0,0,0.5);
+    opacity: 0.5;
+    -webkit-transform: translate(-50%, -50%) rotate(90deg);
+    -ms-transform: translate(-50%, -50%) rotate(90deg);
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  x-splitbox[direction="column"] > [splitter] {
+    min-width: auto;
+    min-height: 0.5em;
+    cursor: ns-resize;
+  }
+
+  x-splitbox[direction="column"] > [splitter]:before {
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+x-splitbox > *:not([splitter]) {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  -ms-flex: auto;
+}
+
+
+@media screen and (max-device-width: 415px) {
+  x-splitbox > [splitter] {
+    min-width: 0.7em;
+  }
+
+    x-splitbox[direction="column"] > [splitter] {
+      min-height: 0.7em;
+    }
 }
