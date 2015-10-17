@@ -21,7 +21,7 @@
 
       if (delta > 0) {
         if (nextOffset > 0) {
-          if (nextSize <= 0 || prevSize >= startingTotal) {
+          if (nextSize <= 0 || prevSize >= startingTotal || prevSize + nextSize > startingTotal) {
             prevSize = startingTotal;
             nextSize = 0;
           }
@@ -32,7 +32,7 @@
 
       else if (delta < 0) {
         if (prevOffset > 0) {
-          if (nextSize <= 0 || nextSize >= startingTotal) {
+          if (prevOffset <= 0 || nextSize >= startingTotal || prevSize + nextSize > startingTotal) {
             nextSize = startingTotal;
             prevSize = 0;
           }
