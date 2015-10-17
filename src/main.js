@@ -9,31 +9,35 @@
     var next = splitter.nextElementSibling, next = !next.hasAttribute('splitter') && next;
     var previous = splitter.previousElementSibling, previous = !previous.hasAttribute('splitter') && previous;
 
+    setPercents(node, props);
+
     node.xtag.drag = xtag.addEvent(node, 'move', function(e){
       var coord = e[props.page];
-      if (props.bounds.start < coord && coord < props.bounds.end) {
 
         var delta = coord > lastCoord ? coord - lastCoord : coord - lastCoord;
-        var previousSize = (previous[props.offset] + delta) / props.parentSize;
-        var nextSize = (next[props.offset] - delta) / props.parentSize;
 
-        if (previousSize > 0 && nextSize > 0) {
-          if (previous) setMinMax(previous, props, previousSize);
-          if (next) setMinMax(next, props, nextSize);
-        }
-        else {
-          var combine = next[props.offset] / props.parentSize + previous[props.offset] / props.parentSize;
-          if (previousSize <= 0){
-            if (next) setMinMax(next, props, combine);
-            if (previous) setMinMax(previous, props, 0);
+        if (coord >= previous[props.edge] && coord <= next[props.edge] + next[props.offset]) {
+          var previousSize = previous[props.offset] + delta;
+          var nextSize = next[props.offset] - delta;
+          
+          if (previousSize > 0 && nextSize > 0) {
+            if (previous) setMinMax(previous, props, previousSize);
+            if (next) setMinMax(next, props, nextSize);
+            lastCoord = coord;
           }
-          else if (nextSize <= 0){
-            if (previous) setMinMax(previous, props, combine);
-            if (next) setMinMax(next, props, 0);
+          else {
+            var combine = next[props.offset] + previous[props.offset];
+            if (previousSize <= 0){
+              if (next) setMinMax(next, props, combine);
+              if (previous) setMinMax(previous, props, 0);
+            }
+            else if (nextSize <= 0){
+              if (previous) setMinMax(previous, props, combine);
+              if (next) setMinMax(next, props, 0);
+            }
+            else lastCoord = coord;
           }
         }
-      }
-      lastCoord = coord;
     });
   }
 
@@ -41,12 +45,14 @@
     var props = node.xtag.props = (node.direction == 'column') ? {
       page: 'pageY',
       offset: 'offsetHeight',
+      edge: 'offsetTop',
       auto: { max: 'maxWidth', min: 'minWidth' },
       style: { max: 'maxHeight', min: 'minHeight' },
       bounds: { start: node.offsetTop, end: node.offsetTop + node.offsetHeight }
     } : {
       page: 'pageX',
       offset: 'offsetWidth',
+      edge: 'offsetLeft',
       auto: { max: 'maxHeight', min: 'minHeight' },
       style: { max: 'maxWidth', min: 'minWidth' },
       bounds: { start: node.offsetLeft, end: node.offsetLeft + node.offsetWidth }
@@ -57,7 +63,7 @@
 
   function setPercents(node, props){
     node.xtag.panels = xtag.queryChildren(node, '*:not([splitter])').map(function(el){
-      setMinMax(el, props, el[props.offset] / props.parentSize);
+      setMinMax(el, props, el[props.offset]);
       el.style[props.auto.max] = 'none';
       el.style[props.auto.min] = 'auto';
       return el;
@@ -65,7 +71,7 @@
   }
 
   function setMinMax(panel, props, value){
-    panel.style[props.style.max] = panel.style[props.style.min] = value * 100 + '%';
+    panel.style[props.style.max] = panel.style[props.style.min] = (value  / props.parentSize) * 100 + '%';
   }
 
   function stopDrag(node){
@@ -91,7 +97,7 @@
     },
     accessors: {
       direction: {
-        attribute: {},
+        attribute: { def: 'row' },
         set: function(direction){
           setPercents(this, getProps(this));
         }
