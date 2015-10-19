@@ -10,36 +10,36 @@
     var lastCoord = event[props.page] - node[props.edge];
     var next = splitter.nextElementSibling, next = !next.hasAttribute('splitter') && next;
     var previous = splitter.previousElementSibling, previous = !previous.hasAttribute('splitter') && previous;
-    var startingTotal = next[props.offset] + previous[props.offset];
+    var startingTotal = next[props.size] + previous[props.size];
 
     setPercents(node, props);
 
     node.xtag.drag = xtag.addEvent(node, 'move', function(e){
       var delta = e[props.page] - node[props.edge] - lastCoord;
-      var nextOffset = next[props.offset];
-      var prevOffset = previous[props.offset];
-      var nextSize = nextOffset - delta;
-      var prevSize = prevOffset + delta;
+      var nextSize = next[props.size];
+      var prevSize = previous[props.size];
+      var nextMod = nextSize - delta;
+      var prevMod = prevSize + delta;
 
       if (delta > 0) {
-        if (nextOffset > 0) {
-          if (nextSize <= 0 || prevSize >= startingTotal || prevSize + nextSize > startingTotal) {
-            prevSize = startingTotal;
-            nextSize = 0;
+        if (nextSize > 0) {
+          if (nextMod <= 0 || prevMod >= startingTotal || prevMod > startingTotal || nextMod > startingTotal) {
+            prevMod = startingTotal;
+            nextMod = 0;
           }
-          setMinMax(next, props, nextSize);
-          setMinMax(previous, props, prevSize);
+          setMinMax(next, props, nextMod);
+          setMinMax(previous, props, prevMod);
         }
       }
 
       else if (delta < 0) {
-        if (prevOffset > 0) {
-          if (prevOffset <= 0 || nextSize >= startingTotal || prevSize + nextSize > startingTotal) {
-            nextSize = startingTotal;
-            prevSize = 0;
+        if (prevSize > 0) {
+          if (prevMod <= 0 || nextMod >= startingTotal || prevMod > startingTotal || nextMod > startingTotal) {
+            nextMod = startingTotal;
+            prevMod = 0;
           }
-          setMinMax(next, props, nextSize);
-          setMinMax(previous, props, prevSize);
+          setMinMax(next, props, nextMod);
+          setMinMax(previous, props, prevMod);
         }
       }
 
@@ -50,24 +50,24 @@
   function getProps(node){
     var props = node.xtag.props = (node.direction == 'column') ? {
       page: 'pageY',
-      offset: 'offsetHeight',
-      edge: 'offsetTop',
+      size: 'clientHeight',
+      edge: 'clientTop',
       auto: { max: 'maxWidth', min: 'minWidth' },
       style: { max: 'maxHeight', min: 'minHeight' }
     } : {
       page: 'pageX',
-      offset: 'offsetWidth',
-      edge: 'offsetLeft',
+      size: 'clientWidth',
+      edge: 'clientLeft',
       auto: { max: 'maxHeight', min: 'minHeight' },
       style: { max: 'maxWidth', min: 'minWidth' }
     };
-    props.parentSize = node[props.offset];
+    props.parentSize = node[props.size];
     return props;
   }
 
   function setPercents(node, props){
     node.xtag.panels = xtag.queryChildren(node, '*:not([splitter])').map(function(el){
-      setMinMax(el, props, el[props.offset]);
+      setMinMax(el, props, el[props.size]);
       el.style[props.auto.max] = 'none';
       el.style[props.auto.min] = 'auto';
       return el;
@@ -96,6 +96,12 @@
     events: {
       'tapstart:delegate(x-splitbox > [splitter])': function(e){
         startDrag(e.currentTarget, this, e);
+      },
+      dragstart: function(e){
+        if (this.hasAttribute('dragging')) {
+          e.preventDefault();
+          return false;
+        }
       }
     },
     accessors: {
