@@ -32,12 +32,13 @@ x-splitbox[direction="column"] {
   flex-direction: column;
 }
 
-x-splitbox[x-splitter-dragging], x-splitbox > [splitter] {
+x-splitbox[dragging], x-splitbox > [splitter] {
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  -webkit-user-drag: none;
 }
 
 x-splitbox > [splitter] {

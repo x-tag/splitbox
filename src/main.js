@@ -2,7 +2,9 @@
 
   function startDrag(node, splitter, event){
 
-    node.setAttribute('x-splitter-dragging', '');
+    node.setAttribute('dragging', '');
+    splitter.setAttribute('dragging', '');
+    node.xtag.splitter = splitter;
 
     var props = getProps(node);
     var lastCoord = event[props.page] - node[props.edge];
@@ -79,22 +81,21 @@
   function stopDrag(node){
     if (node.xtag.drag) {
       xtag.removeEvent(node, node.xtag.drag);
-      node.removeAttribute('x-splitter-dragging');
+      node.removeAttribute('dragging');
+      node.xtag.splitter.removeAttribute('dragging');
+      node.xtag.splitter = null;
       node.xtag.drag = null;
     }
   }
 
   xtag.addEvent(window, 'tapend', function(e){
-    xtag.query(document, 'x-splitbox[x-splitter-dragging]').forEach(stopDrag);
+    xtag.query(document, 'x-splitbox[dragging]').forEach(stopDrag);
   })
 
   xtag.register('x-splitbox', {
     events: {
       'tapstart:delegate(x-splitbox > [splitter])': function(e){
         startDrag(e.currentTarget, this, e);
-      },
-      'dragstart:delegate([x-splitter-dragging])': function(e){
-        return false;
       }
     },
     accessors: {
