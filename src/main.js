@@ -10,7 +10,8 @@
     var lastCoord = event[props.page] - node[props.edge];
     var next = splitter.nextElementSibling, next = !next.hasAttribute('splitter') && next;
     var previous = splitter.previousElementSibling, previous = !previous.hasAttribute('splitter') && previous;
-    var startingTotal = next[props.size] + previous[props.size];
+    var splitterSize = splitter[props.size];
+    var startingTotal = next[props.size] + previous[props.size] - splitterSize;
 
     setPercents(node, props);
 
@@ -25,7 +26,7 @@
         if (nextSize > 0) {
           if (nextMod <= 0 || prevMod >= startingTotal || prevMod > startingTotal || nextMod > startingTotal) {
             prevMod = startingTotal;
-            nextMod = 0;
+            nextMod = splitterSize;
           }
           setMinMax(next, props, nextMod);
           setMinMax(previous, props, prevMod);
@@ -36,7 +37,7 @@
         if (prevSize > 0) {
           if (prevMod <= 0 || nextMod >= startingTotal || prevMod > startingTotal || nextMod > startingTotal) {
             nextMod = startingTotal;
-            prevMod = 0;
+            prevMod = splitterSize;
           }
           setMinMax(next, props, nextMod);
           setMinMax(previous, props, prevMod);
