@@ -102,6 +102,9 @@
           e.preventDefault();
           return false;
         }
+      },
+      contextmemu: function(e){
+        e.preventDefault();
       }
     },
     accessors: {
