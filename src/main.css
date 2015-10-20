@@ -43,38 +43,34 @@ x-splitbox[dragging], x-splitbox > [splitter] {
 
 x-splitbox > [splitter] {
   display: block;
-  position: absolute;
-  top: 1em;
-  bottom: 1em;
-  min-width: 0.5em;
+  position: relative;
+  min-width: 0px !important;
+  max-width: 0px !important;
   cursor: ew-resize;
   background: #ccc;
-  border: 1px solid #a0a0a0;
+  border: 0px solid #a0a0a0;
   border-radius: 10em;
   opacity: 0.7;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-transform: translate(-50%, 0);
-  -ms-transform: translate(-50%, 0);
-  transform: translate(-50%, 0);
 }
 
   x-splitbox > [splitter]:before {
     content: " ";
-    display: none;
+    display: block;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0.75em;
-    height: 1.5em;
+    top: 1em;
+    bottom: 1em;
+    width: 0.5em;
     border: inherit;
+    border-width: 1px;
     background: inherit;
     border-radius: 10em;
-    -webkit-transform: translate(-51%, -50%);
-    -ms-transform: translate(-51%, -50%);
-    transform: translate(-51%, -50%);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transform: translate(-50%, 0);
+    -ms-transform: translate(-50%, 0);
+    transform: translate(-50%, 0);
   }
 
   x-splitbox > [splitter]:after {
@@ -89,21 +85,23 @@ x-splitbox > [splitter] {
   }
 
   x-splitbox[direction="column"] > [splitter] {
+    cursor: ns-resize;
+    min-width: auto !important;
+    max-width: none !important;
+    min-height: 0px !important;
+    max-height: 0px !important;
+  }
+
+  x-splitbox[direction="column"] > [splitter]:before {
     top: auto;
     bottom: auto;
     left: 1em;
     right: 1em;
-    min-width: auto;
-    min-height: 0.5em;
-    cursor: ns-resize;
+    width: auto;
+    height: 0.5em;
     -webkit-transform: translate(0%, -50%);
     -ms-transform: translate(0%, -50%);
     transform: translate(0%, -50%);
-  }
-
-  x-splitbox[direction="column"] > [splitter]:before {
-    width: 1.5em;
-    height: 0.75em;
   }
 
   x-splitbox[direction="column"] > [splitter]:after {
@@ -118,7 +116,6 @@ x-splitbox > [splitter] {
   }
 
   x-splitbox > [splitter][dragging]:before {
-    display: block;
     background: #eaeaea;
   }
 

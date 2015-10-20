@@ -3,15 +3,15 @@
   function startDrag(node, splitter, event){
 
     node.setAttribute('dragging', '');
-    splitter.setAttribute('dragging', '');
     node.xtag.splitter = splitter;
+    splitter.setAttribute('dragging', '');
+    splitter.style.zIndex = node.xtag.splitZ = (node.xtag.splitZ || 0) + 1;
 
     var props = getProps(node);
     var lastCoord = event[props.page] - node[props.edge];
     var next = splitter.nextElementSibling, next = !next.hasAttribute('splitter') && next;
     var previous = splitter.previousElementSibling, previous = !previous.hasAttribute('splitter') && previous;
-    var splitterSize = splitter[props.size];
-    var startingTotal = next[props.size] + previous[props.size] - splitterSize;
+    var startingTotal = next[props.size] + previous[props.size];
 
     setPercents(node, props);
 
@@ -26,7 +26,7 @@
         if (nextSize > 0) {
           if (nextMod <= 0 || prevMod >= startingTotal || prevMod > startingTotal || nextMod > startingTotal) {
             prevMod = startingTotal;
-            nextMod = splitterSize;
+            nextMod = 0;
           }
           setMinMax(next, props, nextMod);
           setMinMax(previous, props, prevMod);
@@ -37,7 +37,7 @@
         if (prevSize > 0) {
           if (prevMod <= 0 || nextMod >= startingTotal || prevMod > startingTotal || nextMod > startingTotal) {
             nextMod = startingTotal;
-            prevMod = splitterSize;
+            prevMod = 0;
           }
           setMinMax(next, props, nextMod);
           setMinMax(previous, props, prevMod);
@@ -53,12 +53,14 @@
       page: 'pageY',
       size: 'clientHeight',
       edge: 'clientTop',
+      splitter: 'scrollHeight',
       auto: { max: 'maxWidth', min: 'minWidth' },
       style: { max: 'maxHeight', min: 'minHeight' }
     } : {
       page: 'pageX',
       size: 'clientWidth',
       edge: 'clientLeft',
+      splitter: 'scrollWidth',
       auto: { max: 'maxHeight', min: 'minHeight' },
       style: { max: 'maxWidth', min: 'minWidth' }
     };
