@@ -32,6 +32,20 @@ x-splitbox[direction="column"] {
   flex-direction: column;
 }
 
+x-splitbox > *:not([splitter]) {
+  min-width: 0;
+  min-height: 0;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  -ms-flex: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 x-splitbox[dragging], x-splitbox > [splitter] {
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
@@ -118,18 +132,6 @@ x-splitbox > [splitter] {
   x-splitbox > [splitter][dragging]:before {
     opacity: 0.3;
   }
-
-x-splitbox > *:not([splitter]) {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -webkit-flex: 1;
-  flex: 1;
-  -ms-flex: auto;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
-}
 
 
 @media screen and (max-device-width: 415px) {

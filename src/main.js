@@ -54,31 +54,25 @@
       size: 'clientHeight',
       edge: 'clientTop',
       splitter: 'scrollHeight',
-      auto: { max: 'maxWidth', min: 'minWidth' },
-      style: { max: 'maxHeight', min: 'minHeight' }
     } : {
       page: 'pageX',
       size: 'clientWidth',
       edge: 'clientLeft',
       splitter: 'scrollWidth',
-      auto: { max: 'maxHeight', min: 'minHeight' },
-      style: { max: 'maxWidth', min: 'minWidth' }
     };
     props.parentSize = node[props.size];
     return props;
   }
 
-  function setPercents(node, props){
+  function setPercents(node, props, setup){
     node.xtag.panels = xtag.queryChildren(node, '*:not([splitter])').map(function(el){
-      setMinMax(el, props, el[props.size]);
-      el.style[props.auto.max] = 'none';
-      el.style[props.auto.min] = 'auto';
+      setMinMax(el, props, el[props.size], setup);
       return el;
     });
   }
 
-  function setMinMax(panel, props, value){
-    panel.style[props.style.max] = panel.style[props.style.min] = (value  / props.parentSize) * 100 + '%';
+  function setMinMax(panel, props, value, setup){
+    panel.style.flex = panel.style[xtag.prefix.lowercase + 'Flex'] = (setup ? '0 0 ' : '1 1 ') + (value  / props.parentSize) * 100 + '%';
   }
 
   function stopDrag(node){
@@ -96,6 +90,11 @@
   })
 
   xtag.register('x-splitbox', {
+    lifecycle: {
+      inserted: function(){
+
+      }
+    },
     events: {
       'tapstart:delegate(x-splitbox > [splitter])': function(e){
         startDrag(e.currentTarget, this, e);
@@ -114,7 +113,7 @@
       direction: {
         attribute: { def: 'row' },
         set: function(direction){
-          setPercents(this, getProps(this));
+          setPercents(this, getProps(this), true);
         }
       }
     }
