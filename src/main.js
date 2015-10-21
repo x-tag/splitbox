@@ -88,11 +88,6 @@
   })
 
   xtag.register('x-splitbox', {
-    lifecycle: {
-      inserted: function(){
-
-      }
-    },
     events: {
       'tapstart:delegate(x-splitbox > [splitter])': function(e){
         startDrag(e.currentTarget, this, e);
