@@ -34,6 +34,10 @@ x-splitbox[direction="column"] {
 
 x-splitbox > * {
   height: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 x-splitbox[direction="column"] > * {
@@ -49,10 +53,6 @@ x-splitbox > *:not([splitter]) {
   -webkit-flex: 1;
   flex: 1;
   -ms-flex: auto;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
 }
 
 x-splitbox[dragging], x-splitbox > [splitter] {
@@ -72,10 +72,6 @@ x-splitbox > [splitter] {
   cursor: ew-resize;
   background: #fff;
   opacity: 0.6;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
 }
 
   x-splitbox > [splitter]:before {
