@@ -46,6 +46,8 @@
 
       lastCoord = e[props.page] - node[props.edge];
     });
+
+    xtag.fireEvent(node, 'splitterdragstart');
   }
 
   function getProps(node){
@@ -80,6 +82,7 @@
       node.xtag.splitter.removeAttribute('dragging');
       node.xtag.splitter = null;
       node.xtag.drag = null;
+      xtag.fireEvent(node, 'splitterdragend');
     }
   }
 
