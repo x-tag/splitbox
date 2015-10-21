@@ -49,19 +49,17 @@
   }
 
   function getProps(node){
-    var props = node.xtag.props = (node.direction == 'column') ? {
+    return node.xtag.props = (node.direction == 'column') ? {
       page: 'pageY',
       size: 'clientHeight',
       edge: 'clientTop',
-      splitter: 'scrollHeight',
+      parentSize: node.clientHeight
     } : {
       page: 'pageX',
       size: 'clientWidth',
       edge: 'clientLeft',
-      splitter: 'scrollWidth',
+      parentSize: node.clientWidth
     };
-    props.parentSize = node[props.size];
-    return props;
   }
 
   function setPercents(node, props, setup){
